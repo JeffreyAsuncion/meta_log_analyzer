@@ -98,6 +98,20 @@ def find_longest_running_pair(big_df):
     return Pair_longest[["pair","run_time"]]
 
 
+def find_gt_ten_mins(big_df):
+    """
+    Filters the Dataframe with run_times greater than 10 mins
+    
+    Args:
+        big_df (Data) - complete dataframe with calculated run_times
+    
+    Return
+        df - dataframe with columns pair and run_time with run_time less 10 mins
+    """
+    
+    GT_ten_mins = big_df[big_df['run_time']>'0 days 00:10:00.000000']
+    
+    return GT_ten_mins[["pair","run_time"]]
 
 
 # This is to silence the SettingWithCopyWarning to reduce vebose warnings
@@ -108,6 +122,8 @@ calculated_runtimes_df = calculate_thread_runtime(pair_list_df)
 
 total_wall_clock = calculate_total_time(calculated_runtimes_df)
 longest_running_pair = find_longest_running_pair(calculated_runtimes_df)
+greater_than_ten = find_gt_ten_mins(calculated_runtimes_df)
 
 print(total_wall_clock)
 print(longest_running_pair)
+print(greater_than_ten)

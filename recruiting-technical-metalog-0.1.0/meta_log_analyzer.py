@@ -81,6 +81,25 @@ def calculate_total_time(big_df):
     return total_time
 
 
+def find_longest_running_pair(big_df):
+    """
+    Sorts the Dataframe by runtime column in descending order 
+    to find the longest running pair
+    
+    Args:
+        big_df (Data) - complete dataframe with calculated run_times
+    
+    Return
+        df - dataframe with one record with columns pair and run_time
+    """
+    
+    Pair_longest = big_df.sort_values(by=['run_time'], ascending=False).head(1)
+    
+    return Pair_longest[["pair","run_time"]]
+
+
+
+
 # This is to silence the SettingWithCopyWarning to reduce vebose warnings
 pd.set_option('mode.chained_assignment', None)
 
@@ -88,4 +107,7 @@ pair_list_df = read_log('input/metadata_update.log')
 calculated_runtimes_df = calculate_thread_runtime(pair_list_df)
 
 total_wall_clock = calculate_total_time(calculated_runtimes_df)
+longest_running_pair = find_longest_running_pair(calculated_runtimes_df)
+
 print(total_wall_clock)
+print(longest_running_pair)

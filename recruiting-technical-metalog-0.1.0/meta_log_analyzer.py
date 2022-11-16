@@ -61,10 +61,31 @@ def calculate_thread_runtime(df_pair_list):
 
     return big_df
 
+
+def calculate_total_time(big_df):
+    """
+    Calculates the total wall-clock time of a run of threads
+    
+    Args: 
+        big_df (Dataframe) - complete dataframe with calculated run_times
+    
+    Returns
+        datetime - total_time run time from starting thread 
+                    to no jobs left to thread terminating
+    """
+    
+    start=big_df['timestamp'].min()
+    stop=big_df['timestamp'].max()
+    total_time = stop - start
+    
+    return total_time
+
+
 # This is to silence the SettingWithCopyWarning to reduce vebose warnings
 pd.set_option('mode.chained_assignment', None)
 
 pair_list_df = read_log('input/metadata_update.log')
 calculated_runtimes_df = calculate_thread_runtime(pair_list_df)
 
-print(calculated_runtimes_df)
+total_wall_clock = calculate_total_time(calculated_runtimes_df)
+print(total_wall_clock)

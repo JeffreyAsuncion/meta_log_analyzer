@@ -1,0 +1,16 @@
+
+
+
+The total wall-clock running time
+************************************************************
+0 days 04:08:55.968095
+
+The pair that took the longest
+************************************************************
+(chng, smoothed_adj_outpatient_cli) 0 days 04:08:55.964634
+
+All pairs that took longer than 10 minutes
+************************************************************
+(chng, smoothed_adj_outpatient_covid) 0 days 00:10:24.751151
+  (chng, smoothed_adj_outpatient_cli) 0 days 04:08:55.964634
+    (chng, smoothed_outpatient_covid) 0 days 04:08:55.924849

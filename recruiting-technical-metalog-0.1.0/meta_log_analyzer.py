@@ -31,9 +31,40 @@ def read_log(log_path):
     return df_pair_list
 
 
+def calculate_thread_runtime(df_pair_list):
+    """
+    Calculates the runtime for thread grouped by MetacacheTread number
+    
+    Args:
+        df_pairs_list (Dataframe) of log file
+        
+    Returns
+        df :  dataframe with original columns with calculated run_times
+    """
+    
+    list_of_df = []
+
+    for i in range(10):
+        # for each thread in thread pool
+        thread = f'MetacacheThread-{i}'
+        a = df_pair_list[df_pair_list['thread']== thread]
+        # convert to datetime 
+        a['timestamp'] = pd.to_datetime(a['timestamp'], infer_datetime_format=True)
+        # find difference from previous and current
+        a['run_time']=a['timestamp'].diff()
+        # shift the result of .diff to point to current and next
+        a.loc[:, 'run_time'] = a.run_time.shift(-1)
+        list_of_df.append(a)
+
+    # concat the list of thread df into one big_df
+    big_df = pd.concat(list_of_df)
+
+    return big_df
+
 # This is to silence the SettingWithCopyWarning to reduce vebose warnings
 pd.set_option('mode.chained_assignment', None)
 
 pair_list_df = read_log('input/metadata_update.log')
+calculated_runtimes_df = calculate_thread_runtime(pair_list_df)
 
-
+print(calculated_runtimes_df)

@@ -26,7 +26,7 @@ def read_log(log_path):
     
     today = date.today()    
     df_pair_list = pd.DataFrame.from_records(pair_list)
-    df_pair_list.to_csv(f'pair_list_{today.strftime("%Y%m%d")}.csv')
+    df_pair_list.to_csv(f'results/pair_list_{today.strftime("%Y%m%d")}.csv')
     
     return df_pair_list
 
@@ -114,6 +114,34 @@ def find_gt_ten_mins(big_df):
     return GT_ten_mins[["pair","run_time"]]
 
 
+def write_results(total_wall_clock, longest_running_pair, greater_than_ten, writePath):
+    """
+    Writes results for total_wall_clock, longest_running_pair, greater_than_ten
+    to file to report_<today's date> in writePath path
+    
+    Args:
+        total_wall_clock (datatime) - result of calculate_total_time()
+        
+        longest_running_pair (Dataframe) - results of find_longest_running_pair()
+        
+        greater_than_ten (Dataframe) - results of find_gt_ten_mins()
+        
+    Return
+        None
+    """
+    
+    with open('results/'+writePath, 'w') as f:
+        longest_running_pair_String = longest_running_pair.to_string(header=False, index=False)
+        greater_than_ten_String = greater_than_ten.to_string(header=False, index=False)
+        f.write("\n\n\n")
+        f.write("The total wall-clock running time\n"+"*"*60+"\n")
+        f.write(str(total_wall_clock))
+        f.write("\n\nThe pair that took the longest\n"+"*"*60+"\n")
+        f.write(longest_running_pair_String)
+        f.write("\n\nAll pairs that took longer than 10 minutes\n"+"*"*60+"\n")
+        f.write(greater_than_ten_String)
+    
+
 # This is to silence the SettingWithCopyWarning to reduce vebose warnings
 pd.set_option('mode.chained_assignment', None)
 
@@ -124,6 +152,6 @@ total_wall_clock = calculate_total_time(calculated_runtimes_df)
 longest_running_pair = find_longest_running_pair(calculated_runtimes_df)
 greater_than_ten = find_gt_ten_mins(calculated_runtimes_df)
 
-print(total_wall_clock)
-print(longest_running_pair)
-print(greater_than_ten)
+today = date.today()    
+writePath = f'report_{today.strftime("%Y%m%d")}.txt'
+write_results(total_wall_clock, longest_running_pair, greater_than_ten, writePath)

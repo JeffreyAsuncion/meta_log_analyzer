@@ -145,7 +145,7 @@ def write_results(total_wall_clock, longest_running_pair, greater_than_ten, writ
 # This is to silence the SettingWithCopyWarning to reduce vebose warnings
 pd.set_option('mode.chained_assignment', None)
 
-pair_list_df = read_log('input/metadata_update.log')
+pair_list_df = read_log('./input/metadata_update.log')
 calculated_runtimes_df = calculate_thread_runtime(pair_list_df)
 
 total_wall_clock = calculate_total_time(calculated_runtimes_df)

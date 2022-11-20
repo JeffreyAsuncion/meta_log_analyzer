@@ -39,7 +39,8 @@ def read_log(log_path):
                 count = 0
                 
     # previous version df_pair_list
-    return len(list_job_run_df)
+    # return len(list_job_run_df)
+    return list_job_run_df
 
 
 def calculate_thread_runtime(df_pair_list):
@@ -66,6 +67,32 @@ def calculate_thread_runtime(df_pair_list):
     big_df = pd.concat(list_of_df)
 
     return big_df
+
+
+def process_each_job(list_job_run_df):
+    """
+    iterates through list_job_run_df 
+    - calculates runtime
+    - adds column for run number
+
+    Args:
+        list_job_run_df (list(dataframes))
+
+    Return
+        dataframe with additional column denoting run number    
+    """
+    list_processed_df = []
+    # iterate thru list_job_run_df
+    for i in range(len(list_job_run_df)):
+        # run calculate_thread_runtime(df)
+        list_of_df = calculate_thread_runtime(list_job_run_df[i])
+        # add column to df['run_number'] = i
+        list_of_df['run_number'] = i
+        list_processed_df.append(list_of_df)
+    # combine all df
+    all_df = pd.concat(list_processed_df)
+
+    return all_df
 
 
 def calculate_total_time(big_df):
@@ -151,10 +178,15 @@ def write_results(total_wall_clock, longest_running_pair, greater_than_ten, writ
 # This is to silence the SettingWithCopyWarning to reduce vebose warnings
 pd.set_option('mode.chained_assignment', None)
 
+# return len test
+# print(read_log('input/metadata_update-extension.log'))
 
-print(read_log('input/metadata_update-extension.log'))
+list_job_run_df = read_log('input/metadata_update-extension.log')
 
-# pair_list_df = read_log('input/metadata_update-extension.log')
+# testing this!
+all_df = process_each_job(list_job_run_df)
+print(all_df[all_df['run_number']==2]['run_number'].head(20))
+
 # calculated_runtimes_df = calculate_thread_runtime(pair_list_df)
 
 # total_wall_clock = calculate_total_time(calculated_runtimes_df)

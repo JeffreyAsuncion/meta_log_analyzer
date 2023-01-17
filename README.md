@@ -1,8 +1,16 @@
-_Take-home activity for the Meta Log task._
+# Background
 
-_This README should be completed by the candidate and serves as part of their submission._
+Our database includes time series data for several hundred  different signalsacross a dozen or so data sources. Each individual time series dataset stored in the database is uniquely identified by its (source, signal) pair.  The datasets differ significantly in size and complexity even though they have the same basic structure.
 
-_Feel free to strcuture this document however you like, so long as it includes the minimum required information: running instructions and sample output._
+We have an analytics job that runs each night to compute statistics on each time series dataset. The job works through each (source, signal) pair using a thread pool.  When the job begins, it logs the size of the thread pool which is currently configured.  While the job is running, it logs the start time of computation for each pair. When the job is complete, it logs some summary information.
+
+# Scenario
+In staging, this analytics job takes an hour to complete in production, it occasionally takes the expected hour, but usually takes between four and five hours.
+
+The staging database was cloned from a relatively recent backup of prod. So it’s not a difference-of-scale problem
+
+You want to see if you can tease out any useful information from the existing logs before exploring more-detailed profiling options.  If there is a pattern in which pairs are taking longer than expected to analyze, it could inform your next step
+
 
 # Meta Log Analyzer
 
